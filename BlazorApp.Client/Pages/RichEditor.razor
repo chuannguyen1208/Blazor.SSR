@@ -10,10 +10,14 @@
 </div>
 
 <div>
-    Review: <span @ref="contentPreview">@result</span>
+    Review: 
 </div>
 
-<button @onclick="GetContents">Get Content</button>
+<div class="ql-container ql-snow" style="border: none">
+    <span class="ql-editor" style="font-size: 14px; line-height: 1.5" @ref="contentPreview"></span>
+</div>
+
+<button @onclick="ShowContents">Show Content</button>
 
 @code {
     IJSObjectReference quill = null!;
@@ -32,5 +36,10 @@
     async Task GetContents()
     {
         result = await JS.InvokeAsync<string>("BlazorQuill.getContent");
+    }
+
+    async Task ShowContents()
+    {
+        await JS.InvokeVoidAsync("BlazorQuill.showContent", contentPreview);
     }
 }
