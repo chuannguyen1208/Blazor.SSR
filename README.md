@@ -8,7 +8,8 @@ Quilljs version using in this sample is 1.0.0 cause 1.3.6 having an issue relate
 
 Key functionalities:
 - Distinguish @rendermode default (without @rendermode which is static server side rendering), InteractiveServer, InteractiveWebAssembly, InteractiveAuto
-- How to work with js file and function effectively
+- How to work with js file and function effectively using IJSObjectReference, ElementReference
+- The Rich Text Editor port to a component and can be reused
 
 <img width="1127" alt="image" src="https://github.com/chuannguyen1208/Blazor.SSR/assets/93895222/4fe6c5d9-84d8-4a0a-9d9d-1200f2dd9620">
 
