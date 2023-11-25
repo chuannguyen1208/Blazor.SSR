@@ -5,19 +5,22 @@
 <PageTitle>Rich Editor</PageTitle>
 <h3>Rich Editor</h3>
 
-<div id="editor">
-    <p>Hello World!</p>
+<div class="row">
+    <div class="col-sm-6">
+        <div id="editor"></div>
+    </div>
+    <div class="col-sm-6">
+        <div class="ql-container ql-snow" style="border: none">
+            <span class="ql-editor" style="font-size: 14px; line-height: 1.5" @ref="contentPreview"></span>
+        </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col">
+        <button @onclick="ShowContents">Show Content</button>
+    </div>
 </div>
 
-<div>
-    Review: 
-</div>
-
-<div class="ql-container ql-snow" style="border: none">
-    <span class="ql-editor" style="font-size: 14px; line-height: 1.5" @ref="contentPreview"></span>
-</div>
-
-<button @onclick="ShowContents">Show Content</button>
 
 @code {
     IJSObjectReference quill = null!;
@@ -30,6 +33,7 @@
         {
             quill = await JS.InvokeAsync<IJSObjectReference>("import", "./blazorQuill.js");
             await quill.InvokeVoidAsync("BlazorQuill.init", "#editor");
+            await quill.InvokeVoidAsync("BlazorQuill.listen", contentPreview);
         }
     }
 
