@@ -1,0 +1,36 @@
+﻿@page "/rich-editor"
+@using System.Text.Json.Serialization
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+<PageTitle>Rich Editor</PageTitle>
+<h3>Rich Editor</h3>
+
+<div id="editor">
+    <p>Hello World!</p>
+</div>
+
+<div>
+    Review: <span @ref="contentPreview">@result</span>
+</div>
+
+<button @onclick="GetContents">Get Content</button>
+
+@code {
+    IJSObjectReference quill = null!;
+    ElementReference contentPreview;
+    string result = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            quill = await JS.InvokeAsync<IJSObjectReference>("import", "./blazorQuill.js");
+            await quill.InvokeVoidAsync("BlazorQuill.init", "#editor");
+        }
+    }
+
+    async Task GetContents()
+    {
+        result = await JS.InvokeAsync<string>("BlazorQuill.getContent");
+    }
+}
