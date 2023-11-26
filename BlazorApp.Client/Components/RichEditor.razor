@@ -1,0 +1,19 @@
+﻿@namespace MyComps
+@using System.Text.Json.Serialization
+@inject IJSRuntime JS
+
+<div id="editor"></div>
+
+@code {
+    [Parameter] public EventCallback EditorInitialized { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IJSObjectReference quill = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/RichEditor.razor.js");
+            await quill.InvokeVoidAsync("BlazorQuill.init", "#editor");
+            await EditorInitialized.InvokeAsync();
+        }
+    }
+}

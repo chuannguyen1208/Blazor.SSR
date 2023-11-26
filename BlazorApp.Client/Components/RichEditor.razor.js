@@ -1,9 +1,8 @@
 ﻿export class BlazorQuill {
     static quill;
 
-    static init(element) {
+    static init(element, reviewElement) {
         console.log('quill init...');
-
         var toolbarOptions = [
             ['bold', 'italic', 'underline', 'strike'],
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -20,27 +19,11 @@
         });
     }
 
-    static getContent() {
-        return this.quill.root.innerHTML;
-    }
-
-    static showContent(elementRef) {
-        elementRef.innerHTML = this.getContent();
-    }
-
     static listen(elementRef) {
         this.quill.on('text-change', function () {
-            this.showContent(elementRef);
+            const content = this.quill.root.innerHTML;
+            elementRef.innerHTML = content;
         }.bind(this));
-    }
-
-    static listenCallback(dotnetInstance) {
-        const func = () => {
-            const content = this.getContent();
-            dotnetInstance.invokeMethodAsync('Callback', content);
-        };
-
-        this.quill.on('text-change', func.bind(this));
     }
 }
 
