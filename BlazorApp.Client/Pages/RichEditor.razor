@@ -1,49 +1,25 @@
 ﻿@page "/rich-editor"
-@using System.Text.Json.Serialization
 @rendermode InteractiveServer
-@inject IJSRuntime JS
-<PageTitle>Rich Editor</PageTitle>
+
 <h3>Rich Editor</h3>
 
 <div class="row">
     <div class="col-sm-6">
-        <div id="editor"></div>
+        <MyComps.RichEditor EditorInitialized="@ListenEditor" @ref="editorRef"></MyComps.RichEditor>
     </div>
     <div class="col-sm-6">
         <div class="ql-container ql-snow" style="border: none">
-            <span class="ql-editor" style="font-size: 14px; line-height: 1.5" @ref="contentPreview"></span>
+            <span class="ql-editor" style="font-size: 14px; line-height: 1.5" @ref="reviewRef"></span>
         </div>
     </div>
 </div>
-<div class="row mt-5">
-    <div class="col">
-        <button @onclick="ShowContents">Show Content</button>
-    </div>
-</div>
-
 
 @code {
-    IJSObjectReference quill = null!;
-    ElementReference contentPreview;
-    string result = string.Empty;
+    MyComps.RichEditor editorRef = default!;
+    ElementReference reviewRef;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    async Task ListenEditor()
     {
-        if (firstRender)
-        {
-            quill = await JS.InvokeAsync<IJSObjectReference>("import", "./blazorQuill.js");
-            await quill.InvokeVoidAsync("BlazorQuill.init", "#editor");
-            await quill.InvokeVoidAsync("BlazorQuill.listen", contentPreview);
-        }
-    }
-
-    async Task GetContents()
-    {
-        result = await JS.InvokeAsync<string>("BlazorQuill.getContent");
-    }
-
-    async Task ShowContents()
-    {
-        await JS.InvokeVoidAsync("BlazorQuill.showContent", contentPreview);
+        await editorRef.ReviewOnRef(reviewRef);
     }
 }

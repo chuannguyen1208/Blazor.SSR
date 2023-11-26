@@ -1,19 +1,34 @@
 ﻿@namespace MyComps
+
 @using System.Text.Json.Serialization
+@implements IDisposable
 @inject IJSRuntime JS
 
 <div id="editor"></div>
 
 @code {
     [Parameter] public EventCallback EditorInitialized { get; set; } = default!;
+    [Parameter] public EventCallback<string> OnTextChanged { get; set; }
+    IJSObjectReference quill = null!;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            IJSObjectReference quill = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/RichEditor.razor.js");
+            quill = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/RichEditor.razor.js");
             await quill.InvokeVoidAsync("BlazorQuill.init", "#editor");
             await EditorInitialized.InvokeAsync();
         }
+    }
+
+    public async Task ReviewOnRef(ElementReference elementRef)
+    {
+        await quill.InvokeVoidAsync("BlazorQuill.listen", elementRef);
+    }
+
+
+    public void Dispose()
+    {
+        quill.DisposeAsync();
     }
 }
