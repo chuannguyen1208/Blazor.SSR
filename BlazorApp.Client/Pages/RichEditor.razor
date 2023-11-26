@@ -5,21 +5,22 @@
 
 <div class="row">
     <div class="col-sm-6">
-        <MyComps.RichEditor EditorInitialized="@ListenEditor" @ref="editorRef"></MyComps.RichEditor>
+        <MyComps.RichEditor OnTextChanged="@TextChanged" ></MyComps.RichEditor>
     </div>
     <div class="col-sm-6">
-        <div class="ql-container ql-snow" style="border: none">
-            <span class="ql-editor" style="font-size: 14px; line-height: 1.5" @ref="reviewRef"></span>
+        <div class="p-3 ql-container ql-snow">
+            <span class="ql-editor">
+                @((MarkupString)text)
+            </span>
         </div>
     </div>
 </div>
 
 @code {
-    MyComps.RichEditor editorRef = default!;
-    ElementReference reviewRef;
+    string text = "...";
 
-    async Task ListenEditor()
+    void TextChanged(string text)
     {
-        await editorRef.ReviewOnRef(reviewRef);
+        this.text = text;
     }
 }

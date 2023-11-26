@@ -19,10 +19,12 @@
         });
     }
 
-    static listen(elementRef) {
+    static listen(dotnetInstance) {
         this.quill.on('text-change', function () {
             const content = this.quill.root.innerHTML;
-            elementRef.innerHTML = content;
+            if (dotnetInstance) {
+                dotnetInstance.invokeMethodAsync("EditorCallback", content);
+            }
         }.bind(this));
     }
 }

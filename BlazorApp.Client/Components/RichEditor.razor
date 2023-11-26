@@ -17,18 +17,22 @@
         {
             quill = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/RichEditor.razor.js");
             await quill.InvokeVoidAsync("BlazorQuill.init", "#editor");
+            await quill.InvokeVoidAsync("BlazorQuill.listen", DotNetObjectReference.Create<MyComps.RichEditor>(this));
             await EditorInitialized.InvokeAsync();
         }
     }
 
-    public async Task ReviewOnRef(ElementReference elementRef)
+    [JSInvokable]
+    public async Task EditorCallback(string text)
     {
-        await quill.InvokeVoidAsync("BlazorQuill.listen", elementRef);
+        await OnTextChanged.InvokeAsync(text);
     }
-
 
     public void Dispose()
     {
-        quill.DisposeAsync();
+        if (quill is not null)
+        {
+            quill.DisposeAsync();
+        }
     }
 }
